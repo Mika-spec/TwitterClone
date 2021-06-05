@@ -20,8 +20,8 @@ $view_tweets = [
     'tweet_body' => '今プログラミングをしています。',
     'tweet_image_name' => null,
     'tweet_created_at' => '2021-3-15 14:00:00',
-    'like_id' => null,
-    'like_count' => 0,
+    'like_id' => null, //自分がいいね！押しているか否か
+    'like_count' => 0, //トータルのいいね！数
   ],
   [
     'user_id' => 2,
@@ -106,6 +106,12 @@ function convertToDayTimeAgo(string $datetime)
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
   <link href="<?php echo HOME_URL; ?>Views\CSS\style.css" rel="stylesheet">
+  <!-- JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous" defer></script>
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous" defer></script>
+  <!-- like.js -->
+  <script src="<?php echo HOME_URL; ?>Views/js/like.js" defer></script>
   <title>ホーム画面/Twitterクローン</title>
 </head>
 
@@ -121,7 +127,7 @@ function convertToDayTimeAgo(string $datetime)
           <li class="nav-item"><a href="notification.php" class="nav-link"><img src="<?php echo HOME_URL; ?>Views\img\icon-notification.svg" alt=""></a></li>
           <li class="nav-item"><a href="profile.php" class="nav-link"><img src="<?php echo HOME_URL; ?>Views\img\icon-profile.svg" alt=""></a></li>
           <li class="nav-item"><a href="post.php" class="nav-link"><img src="<?php echo HOME_URL; ?>Views\img\icon-post-tweet-twitterblue.svg" alt="" class="post-tweet"></a></li>
-          <li class="nav-item my-icon"><img src="<?php echo HOME_URL; ?>Views\img_uploaded\user\sample-person.jpg" alt=""></li>
+          <li class="nav-item my-icon"><img src="<?php echo HOME_URL; ?>Views\img_uploaded\user\sample-person.jpg" class="js-popover" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="<a href='profile.php'>プロフィール</a><br><a href='sign-out.php'>ログアウト</a>" data-bs-html="true"></li>
         </ul>
       </div>
     </div>
@@ -189,7 +195,7 @@ function convertToDayTimeAgo(string $datetime)
 
               <!-- いいね！がある時ない時 -->
               <div class="icon-list">
-                <div class="like">
+                <div class="like js-like" data-like-id="<?php echo htmlspecialchars($view_tweet['like_id']); ?>">
                   <?php 
                   if (isset($view_tweet['like_id'])) {
                     // いいね！している場合
@@ -200,7 +206,7 @@ function convertToDayTimeAgo(string $datetime)
                   ?>
                 </div>
                 <!-- いいね！の数 -->
-                <div class="like-count"><?php echo htmlspecialchars($view_tweet['like_count']); ?></div>
+                <div class="like-count js-like-count"><?php echo htmlspecialchars($view_tweet['like_count']); ?></div>
               </div>
             </div><!-- /.content -->
           </div><!-- /.tweet -->
@@ -209,5 +215,15 @@ function convertToDayTimeAgo(string $datetime)
       <?php endif; ?>
     </div><!-- /.main -->
   </div><!-- /.container -->
+
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    $('.js-popover').popover({
+      container: 'body'
+    })
+  }, false); 
+  </script>
+
 </body>
 </html>
