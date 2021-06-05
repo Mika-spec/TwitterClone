@@ -156,6 +156,7 @@ html {
   padding-top: 8px;
 }
 
+/* 投稿欄と投稿済み欄の境目ライン */
 .home .ditch {
   height: 15px;
   background-color: #f7f8f8;
